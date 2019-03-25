@@ -8,7 +8,7 @@ pub trait System {
 #[macro_export] macro_rules! dispatch {
     ([$($system:tt),*]) => {
         // launch threads and recurse on all repitions, collect all threadIDs into an array handles
-        let handles = [$(Some(std::thread::spawn(|| {dispatch!($system); })),)*];
+        let mut handles = [$(Some(std::thread::spawn(move || {dispatch!($system); })),)*];
         // join all the threads
         for handle in &mut handles {
             // since JoinHandles require ownership to join, and we cant take ownership out

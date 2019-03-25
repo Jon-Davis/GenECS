@@ -33,3 +33,38 @@ fn system_test(){
         assert!(SYSTEM_TEST == 4);
     }
 }
+
+#[test]
+fn system_par_test(){
+    use genecs::system::System;
+    use std::sync::Mutex;
+
+    lazy_static! {
+        static ref SYSTEM_TEST : Mutex<usize> = Mutex::new(0);
+    }
+
+    enum Mather {
+        Add(usize),
+    }
+
+    impl System for Mather {
+        fn run(&mut self) {
+            // needed to modify static variable
+            match self {
+                Mather::Add(i) => {
+                    let val = SYSTEM_TEST.lock();
+                    match val {
+                        Ok(mut value) => *value += *i,
+                        _ => panic!("Failed to get mutex lock, this might be a test error"),
+                    }
+                },
+            }
+        }
+    }
+    let mut add_one = Mather::Add(1);
+    let mut add_two = Mather::Add(2);
+    let mut add_three = Mather::Add(3);
+
+    dispatch!([add_one, add_two, add_three]);
+    assert!(*SYSTEM_TEST.lock().unwrap() == 6);
+}

@@ -36,7 +36,7 @@ fn component_test(){
     st3.component_insert(10, SimpleTuple3(5));
     st3.component_insert(12, SimpleTuple3(6));
     
-    let mut iter = kva_join!(st.iter(), st2.iter(), st3.iter());
+    let mut iter = kvand_join!(st.iter(), st2.iter(), st3.iter());
     let (k, (v1,v2,v3)) = iter.next().unwrap();
     assert!(*k == 6, "key of first join was incorrect");
     assert!(v1.0 == 2, "First value of first join was incorrect");
