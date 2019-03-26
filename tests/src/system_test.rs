@@ -49,7 +49,6 @@ fn system_par_test(){
 
     impl System for Mather {
         fn run(&mut self) {
-            // needed to modify static variable
             match self {
                 Mather::Add(i) => {
                     let val = SYSTEM_TEST.lock();
@@ -61,10 +60,15 @@ fn system_par_test(){
             }
         }
     }
+    
+    let mut add_zero = Mather::Add(0);
     let mut add_one = Mather::Add(1);
     let mut add_two = Mather::Add(2);
     let mut add_three = Mather::Add(3);
 
-    dispatch!([add_one, add_two, add_three]);
+    dispatch!(add_zero);
+    dispatch_parallel!(&mut add_one, &mut add_two, &mut add_three);
     assert!(*SYSTEM_TEST.lock().unwrap() == 6);
+    dispatch!(add_one,add_two,add_three);
+    assert!(*SYSTEM_TEST.lock().unwrap() == 12);
 }
