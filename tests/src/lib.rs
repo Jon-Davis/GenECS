@@ -8,3 +8,4 @@ mod component_test;
 mod resource_test;
 mod system_test;
 mod entity_test;
+mod full_tests;

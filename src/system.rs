@@ -4,13 +4,14 @@ pub trait System {
     fn run(&mut self);
 }
 
-/// the dispatch! macro is used 
+/// the dispatch! simply runs all the systems given sequentially
 #[macro_export] macro_rules! dispatch {
     ($($system:expr),*) => {
         $($system.run();)*
     };
 }
 
+/// the dispatch_parallel! macro spawns a thread for each system, then runs them
 #[macro_export] macro_rules! dispatch_parallel {
     ($($system:expr),*) => {
         genecs::crossbeam_utils::thread::scope(|s| {

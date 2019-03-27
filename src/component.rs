@@ -17,6 +17,8 @@ pub trait Component<S> : StaticStorage<S> where S : ComponentStorage<Self> + 'st
 pub trait ComponentStorage<V> : Default {
     type EntityID;
     fn component_insert(&mut self, key : Self::EntityID, value : V);
+    fn component_get(&self, key : Self::EntityID) -> Option<&V>;
+    fn component_get_mut(&mut self, key : Self::EntityID) -> Option<&mut V>;
     fn component_remove(&mut self, key : &Self::EntityID);
 }
 
@@ -24,6 +26,8 @@ pub trait ComponentStorage<V> : Default {
 impl<K: Ord + Copy, V> ComponentStorage<V> for std::collections::BTreeMap<K, V> {
     type EntityID = K;
     fn component_insert(&mut self, key : Self::EntityID, value : V){ self.insert(key, value); }
+    fn component_get(&self, key : Self::EntityID) -> Option<&V> { self.get(&key) }
+    fn component_get_mut(&mut self, key : Self::EntityID) -> Option<&mut V> {self.get_mut(&key) }
     fn component_remove(&mut self, key : &Self::EntityID) { self.remove(key); }
 }
 

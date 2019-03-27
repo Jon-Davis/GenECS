@@ -225,12 +225,12 @@ impl std::fmt::Debug for Error {
     ($type:tt, $(other:tt),*) => {$type};
 }
 
-/// The acquire! macro is used to retrieve an arbitrary number of ComponentStorages
+/// The acquire! macro is used to retrieve an arbitrary number of StaticStorages
 /// in a thread safe manner. The macro will only return once it can acquire all of the
-/// ComponentStorages with the requested permisions.
+/// StaticStorages with the requested permisions.
 /// 
 /// For example acquire!(Read(Type1), Write(Type2), Read(Type3)) will return a
-/// ComponentGuard with refrences to the ComponentStorages of Type1 and Type3, and
+/// ComponentGuard with refrences to the StaticStorages of Type1 and Type3, and
 /// a mutable refrence to the ComponentStorage of Type2. 
 /// 
 /// This macro CAN block

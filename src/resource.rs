@@ -1,13 +1,15 @@
 use crate::static_storage::StaticStorage;
 
+/// Resources are globally stored data where only 1 instance of
+/// a type is stored. 
 pub trait Resource : StaticStorage<Self> + 'static {}
 
-/// impl_resource! macro implements the Component Trait on a given struct
-/// The first argument is the struct that Component will be implemented on
-/// The second argument is the ComponentStorage that will store the Component.
+/// impl_resource! macro implements the Resource Trait on a given struct
+/// The first argument is the struct that Resource will be 
+/// The second argument is an expression that will initialize the resource
 /// 
-/// For example impl_resource!((), BTreeMap<u64, ()>) will create a storage for the
-/// () type, and the EntityId's will be of type u64.
+/// For example impl_resource!(usize, 4 + 5) will initialize a global usize resource
+/// with a defualt value of 9, calling acquire!(Read(usize)) will return the value of this resource
 #[macro_export] macro_rules! impl_resource {
     ($name:ty, $init:expr) => {
         impl genecs::static_storage::StaticStorage<$name> for $name {
